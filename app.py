@@ -88,7 +88,7 @@ if user_query:
             """
             
             # Step C: Send to Gemini 1.5 Flash
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-1.5-flash-latest')
             response = model.generate_content(prompt)
             
             # Step D: Display Results
