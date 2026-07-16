@@ -1,5 +1,5 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai
 import chromadb
 from chromadb.utils import embedding_functions
 
@@ -26,8 +26,8 @@ if not api_key:
     st.info("Please enter your Gemini API Key in the sidebar to start.", icon="🔑")
     st.stop()
 
-# Configure the Gemini API
-genai.configure(api_key=api_key)
+# Initialize the modern GenAI Client
+client = genai.Client(api_key=api_key)
 
 # --- 2. Initialize ChromaDB (In-Memory) ---
 @st.cache_resource
@@ -86,11 +86,15 @@ if user_query:
             Question: {user_query}
             Answer:
             """
+        
             
-            # Step C: Send to Gemini 1.5 Flash
-            model = genai.GenerativeModel('gemini-1.5-flash-latest')
-            response = model.generate_content(prompt)
-            
+            # Call generate_content directly using the client and specify the model
+            response = client.models.generate_content(
+                model='gemini-1.5-flash',
+                contents=prompt 
+                )
+
+
             # Step D: Display Results
             st.markdown("### 🤖 Answer")
             st.write(response.text)
